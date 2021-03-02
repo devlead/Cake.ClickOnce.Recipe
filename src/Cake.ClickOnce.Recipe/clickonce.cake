@@ -18,19 +18,35 @@ public record ClickOnceData(
     public string AppCodeBase { get; } = $"{PublishUrl}/{GetTargetApplicationManifestFile(TargetDirectoryName, AppName)}";
 
 }
+
 public static void MageTool(
     this ICakeContext context,
-    DirectoryPath WorkingDirectory,
+    DirectoryPath workingDirectory,
     Func<ProcessArgumentBuilder, ProcessArgumentBuilder> args
     )
 {
-    context.DotNetCoreTool(
-                "mage",
-                new DotNetCoreToolSettings {
-                    WorkingDirectory = WorkingDirectory,
-                    ArgumentCustomization = args
-                });
+    var localTool = context.Tools.Resolve("dotnet-mage.exe");
+    var arguments = new ProcessArgumentBuilder();
+    if (localTool == null)
+    {
+        arguments.Append("mage");
+        localTool = context.Tools.Resolve("dotnet.exe") ?? throw new Exception("Failed to resolve dotnet exe.");
+    }
+
+    var resultCode = context.StartProcess(
+            localTool,
+            new ProcessSettings {
+                Arguments = args(arguments),
+                WorkingDirectory =  workingDirectory
+            }
+        );
+
+    if (resultCode != 0)
+    {
+        throw new Exception($"Failed to execute {localTool} ({resultCode})");
+    }
 }
+
 public static void MageToolAddLauncher(
     this ICakeContext context,
     DirectoryPath workingDirectory,
@@ -50,7 +66,6 @@ public static void MageToolAddLauncher(
                                 clickOnceData.TargetDirectoryName
                             )
                 );
-
 
 public static void MageToolNewApplication(
     this ICakeContext context,
@@ -81,6 +96,7 @@ public static void MageToolNewApplication(
                                 clickOnceData.Version
                             )
                 );
+
 public static void MageToolNewDeployment(
     this ICakeContext context,
     DirectoryPath workingDirectory,
