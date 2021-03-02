@@ -7,7 +7,7 @@ Opinionated Cake recipe for simplifying the publishing of .NET 5 Windows applica
 ### Cake Example
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.1.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.2.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "devlead";
@@ -137,8 +137,7 @@ Above variables are required for publish to be attempted.
 
 * Windows
 * .NET 5 SDK
-* .NET 5 Mage tool [Microsoft.DotNet.Mage](https://www.nuget.org/packages/microsoft.dotnet.mage)
-* Cake 1.0 RC1 or newer [Cake.Tool](https://www.nuget.org/packages/Cake.Tool/1.0.0-rc0002)
+* Cake 1.0 or newer [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
 
 ### Step-by-step
 
@@ -148,22 +147,20 @@ From command line in repo root
 
 1. Create tool manifest to tool versions are pinned/versioned with in repo
     * `dotnet new tool-manifest`
-1. Install .NET 5 Mage tool
-    * `dotnet tool install microsoft.dotnet.mage`
 1. Install Cake tool
-    * `dotnet tool install Cake.Tool --version 1.0.0-rc0002`
+    * `dotnet tool install Cake.Tool`
 1. Create Cake script as `build.cake` assuming application solution is in folder `./src` (check NuGet for latest version of recipe [Cake.ClickOnce.Recipe](https://www.nuget.org/packages/Cake.ClickOnce.Recipe)).
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.1.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.2.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "PublisherName";
-ClickOnce.PublishUrl = "https://{sortageAccount}.blob.core.windows.net/{container}";
+ClickOnce.PublishUrl = "https://{storageAccount}.blob.core.windows.net/{container}";
 ClickOnce.RunBuild();
 ```
 
-5. Execute script
+4. Execute script
     * `dotnet cake`
 
 If all succeeds, it should have build and publish the application to `./artifacts` directory, if running on GitHub actions it will also deploy to the configured Azure Blob Storage.
