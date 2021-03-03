@@ -29,11 +29,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [windows-latest]
+    runs-on: windows-latest
     steps:
       - name: Get the sources
         uses: actions/checkout@v2
@@ -161,6 +157,13 @@ ClickOnce.RunBuild();
 ```
 
 4. Execute script
-    * `dotnet cake`
+  * `dotnet cake`
 
 If all succeeds, it should have build and publish the application to `./artifacts` directory, if running on GitHub actions it will also deploy to the configured Azure Blob Storage.
+
+## Resources
+
+* Blog post - [Introducing Cake ClickOnce Recipe](https://www.devlead.se/posts/2021/2021-03-03-introducing-cake-clickonce-recipe)
+* Recipe on NuGet.org - [nuget.org/packages/Cake.ClickOnce.Recipe](https://www.nuget.org/packages/Cake.ClickOnce.Recipe/)
+* Example repository on GitHub - [github.com/devlead/Cake.ClickOnce.Recipe.Example](https://github.com/devlead/Cake.ClickOnce.Recipe.Example)
+* Cake - [cakebuild.net](https://cakebuild.net/)
