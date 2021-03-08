@@ -6,14 +6,19 @@ public record BuildData(
     DirectoryPath ProjectRoot,
     DotNetCoreMSBuildSettings MSBuildSettings,
     DirectoryPath ArtifactsPath,
-    DirectoryPath OutputPath
+    DirectoryPath OutputPath,
+    DirectoryPath IntegrationTestsPath
     )
 {
     public DirectoryPath NuGetOutputPath { get; } = OutputPath.Combine("nuget");
     public DirectoryPath BinaryOutputPath { get; } = OutputPath.Combine("bin");
+    public DirectoryPath IntegrationTestsToolPath { get; } = IntegrationTestsPath.Combine("tools");
+    public FilePath IntegrationTestsCakePath { get; } = IntegrationTestsPath.CombineWithFilePath("build.cake");
+
     public ICollection<DirectoryPath> DirectoryPathsToClean = new []{
         ArtifactsPath,
-        OutputPath
+        OutputPath,
+        IntegrationTestsPath.Combine("tools")
     };
 
 

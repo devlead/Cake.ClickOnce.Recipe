@@ -23,6 +23,9 @@ Setup(
         var artifactsPath = context
                             .MakeAbsolute(context.Directory("./artifacts"));
 
+        var integrationTestsPath = context
+                            .MakeAbsolute(context.Directory("./tests/integration"));
+
         return new BuildData(
             version,
             "src",
@@ -43,7 +46,8 @@ Setup(
                 .WithProperty("ContinuousIntegrationBuild", gh.IsRunningOnGitHubActions ? "true" : "false")
                 .WithProperty("EmbedUntrackedSources", "true"),
             artifactsPath,
-            artifactsPath.Combine(version)
+            artifactsPath.Combine(version),
+            integrationTestsPath
             );
     }
 );
@@ -80,7 +84,6 @@ Task("Clean")
         }
     )
 .Then("Pack")
-    .Default()
     .Does<BuildData>(
         static (context, data) => context.DotNetCorePack(
             data.ProjectRoot.FullPath,
@@ -89,6 +92,22 @@ Task("Clean")
                 NoRestore = true,
                 OutputDirectory = data.NuGetOutputPath,
                 MSBuildSettings = data.MSBuildSettings
+            }
+        )
+    )
+.Then("Integration-Tests")
+    .Default()
+    .Does<BuildData>(
+        static (context, data) => context.CakeExecuteScript(
+            data.IntegrationTestsCakePath,
+            new CakeSettings {
+                EnvironmentVariables = {
+                    { "RECIPE_SOURCE",  data.NuGetOutputPath.FullPath },
+                    { "RECIPE_VERSION",  data.Version },
+                    { "CAKE_PATHS_TOOLS", data.IntegrationTestsToolPath.FullPath },
+                    { "CAKE_PATHS_ADDINS", data.IntegrationTestsToolPath.Combine("Addins").FullPath },
+                    { "CAKE_PATHS_MODULES", data.IntegrationTestsToolPath.Combine("Modules").FullPath }
+                }
             }
         )
     )
