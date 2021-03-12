@@ -36,7 +36,7 @@ Setup(
                 .WithProperty("Authors", "devlead")
                 .WithProperty("Company", "devlead")
                 .WithProperty("PackageLicenseExpression", "MIT")
-                .WithProperty("PackageTags", "Cake;Build;Recipe;ClickOnce")
+                .WithProperty("PackageTags", "Cake;Build;Recipe;ClickOnce;cake-recipe")
                 .WithProperty("PackageDescription", "Opinionated Cake recipe for simplifying the publishing of .NET 5 Windows application using GitHub actions, Cake and ClickOnce to Azure Blob Storage.")
                 .WithProperty("PackageIconUrl", "https://cdn.jsdelivr.net/gh/cake-contrib/graphics@a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png")
                 .WithProperty("PackageIcon", "cake-contrib-medium.png")
