@@ -73,6 +73,13 @@ Task("Clean")
         static (context, data) => context.DotNetCoreTool(
                 "tool",
                 new DotNetCoreToolSettings {
+                    EnvironmentVariables = {
+                        { "RECIPE_SOURCE",  data.NuGetOutputPath.FullPath },
+                        { "RECIPE_VERSION",  data.Version },
+                        { "CAKE_PATHS_TOOLS", data.IntegrationTestsToolPath.FullPath },
+                        { "CAKE_PATHS_ADDINS", data.IntegrationTestsToolPath.Combine("Addins").FullPath },
+                        { "CAKE_PATHS_MODULES", data.IntegrationTestsToolPath.Combine("Modules").FullPath }
+                    },
                     ArgumentCustomization = args => args
                                                         .Append("run")
                                                         .Append("dpi")
