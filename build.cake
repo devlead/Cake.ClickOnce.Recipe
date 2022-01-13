@@ -17,8 +17,13 @@ Setup(
 
         var gh = context.GitHubActions();
         var version = assertedVersions.LegacySemVerPadded;
+        var branchName = assertedVersions.BranchName;
+        var isMainBranch = StringComparer.OrdinalIgnoreCase.Equals("main", branchName);
 
-        context.Information("Building version {0}", version);
+        context.Information("Building version {0} (Branch: {1}, IsMain: {2})",
+            version,
+            branchName,
+            isMainBranch);
 
         var artifactsPath = context
                             .MakeAbsolute(context.Directory("./artifacts"));
@@ -28,6 +33,7 @@ Setup(
 
         return new BuildData(
             version,
+            isMainBranch,
             "src",
             new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
@@ -142,4 +148,43 @@ Task("Clean")
             }
         )
     )
+.Then("Upload-Artifacts")
+    .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
+    .Does<BuildData>(
+        static (context, data) => context
+            .GitHubActions()
+            .Commands
+            .UploadArtifact(data.ArtifactsPath, "artifacts")
+    )
+.Then("Push-GitHub-Packages")
+    .WithCriteria<BuildData>( (context, data) => data.ShouldPushGitHubPackages())
+    .DoesForEach<BuildData, FilePath>(
+        static (data, context)
+            => context.GetFiles(data.NuGetOutputPath.FullPath + "/*.nupkg"),
+        static (data, item, context)
+            => context.DotNetNuGetPush(
+                item.FullPath,
+            new DotNetNuGetPushSettings
+            {
+                Source = data.GitHubNuGetSource,
+                ApiKey = data.GitHubNuGetApiKey
+            }
+        )
+    )
+.Then("Push-NuGet-Packages")
+    .WithCriteria<BuildData>( (context, data) => data.ShouldPushNuGetPackages())
+    .DoesForEach<BuildData, FilePath>(
+        static (data, context)
+            => context.GetFiles(data.NuGetOutputPath.FullPath + "/*.nupkg"),
+        static (data, item, context)
+            => context.DotNetNuGetPush(
+                item.FullPath,
+                new DotNetNuGetPushSettings
+                {
+                    Source = data.NuGetSource,
+                    ApiKey = data.NuGetApiKey
+                }
+        )
+    )
+.Then("GitHub-Actions")
 .Run();
