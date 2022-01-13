@@ -26,14 +26,15 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       - name: Run Cake script
-        run: |
-          echo ::group::".NET Tool Restore"
-          dotnet tool restore
-          echo ::endgroup::
-          dotnet cake --target=Integration-Tests
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: cake-build/cake-action@v1
+        env:
+          NuGetReportSettings_SharedKey: ${{ secrets.NUGETREPORTSETTINGS_SHAREDKEY }}
+          NuGetReportSettings_WorkspaceId: ${{ secrets.NUGETREPORTSETTINGS_WORKSPACEID }}
+          GH_PACKAGES_NUGET_SOURCE: ${{ secrets.GH_PACKAGES_NUGET_SOURCE }}
+          GH_PACKAGES_NUGET_APIKEY: ${{ secrets.GH_PACKAGES_NUGET_APIKEY }}
+          NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+          NUGET_APIKEY: ${{ secrets.NUGET_APIKEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: artifacts
-          path: artifacts
+          cake-version: tool-manifest
+          target: GitHub-Actions

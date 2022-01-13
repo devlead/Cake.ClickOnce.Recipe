@@ -1,4 +1,4 @@
-#addin nuget:?package=Polly&version=7.2.1
+#addin nuget:?package=Polly&version=7.2.2
 
 using System.Globalization;
 using System.Net.Http;
