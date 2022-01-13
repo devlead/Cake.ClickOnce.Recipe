@@ -1,13 +1,13 @@
 # Cake.ClickOnce.Recipe
 
-Opinionated Cake recipe for simplifying the publishing of .NET 5 Windows application using GitHub actions, Cake and ClickOnce to Azure Blob Storage.
+Opinionated Cake recipe for simplifying the publishing of .NET 6 Windows application using GitHub actions, Cake and ClickOnce to Azure Blob Storage.
 
 ## Usage
 
 ### Cake Example
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.5.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.6.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "devlead";
@@ -132,8 +132,8 @@ Above variables are required for publish to be attempted.
 ### Requirements
 
 * Windows
-* .NET 5 SDK
-* Cake 1.0 or newer [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
+* .NET 6 SDK
+* Cake 2.0 or newer [Cake.Tool](https://www.nuget.org/packages/Cake.Tool)
 
 ### Step-by-step
 
@@ -148,7 +148,7 @@ From command line in repo root
 1. Create Cake script as `build.cake` assuming application solution is in folder `./src` (check NuGet for latest version of recipe [Cake.ClickOnce.Recipe](https://www.nuget.org/packages/Cake.ClickOnce.Recipe)).
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.5.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.6.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "PublisherName";

@@ -1,1 +1,1 @@
-#tool "dotnet:?package=microsoft.dotnet.mage&version=5.0.0"
+#tool "dotnet:?package=microsoft.dotnet.mage&version=6.0.1"
