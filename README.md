@@ -7,7 +7,7 @@ Opinionated Cake recipe for simplifying the publishing of .NET 5 Windows applica
 ### Cake Example
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.2.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.5.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "devlead";
@@ -38,13 +38,13 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       - name: Run Cake script
+        uses: cake-build/cake-action@v1
         env:
           PUBLISH_STORAGE_ACCOUNT: ${{ secrets.PUBLISH_STORAGE_ACCOUNT }}
           PUBLISH_STORAGE_CONTAINER: ${{ secrets.PUBLISH_STORAGE_CONTAINER }}
           PUBLISH_STORAGE_KEY: ${{ secrets.PUBLISH_STORAGE_KEY }}
-        run: |
-          dotnet tool restore
-          dotnet cake
+        with:
+          cake-version: tool-manifest
 ```
 
 ### Output Example on GitHub actions
@@ -148,7 +148,7 @@ From command line in repo root
 1. Create Cake script as `build.cake` assuming application solution is in folder `./src` (check NuGet for latest version of recipe [Cake.ClickOnce.Recipe](https://www.nuget.org/packages/Cake.ClickOnce.Recipe)).
 
 ```csharp
-#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.2.0"
+#load "nuget:?package=Cake.ClickOnce.Recipe&version=0.5.0"
 
 ClickOnce.ApplicationName = "MyApp";
 ClickOnce.Publisher = "PublisherName";
