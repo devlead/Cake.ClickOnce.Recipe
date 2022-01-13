@@ -78,7 +78,7 @@ Setup(context=>{
     return new BuildData(
         ClickOnce.Version,
         ClickOnce.Configuration,
-        new DotNetCoreMSBuildSettings()
+        new DotNetMSBuildSettings()
                                 .WithProperty("Version", ClickOnce.Version)
                                 .WithProperty("Configuration", ClickOnce.Configuration),
         new ClickOnceData(
@@ -116,9 +116,9 @@ Task("Restore")
     .IsDependentOn("Clean")
     .Does<BuildData>(
         (context, data)=> {
-            context.DotNetCoreRestore(
+            context.DotNetRestore(
                 data.SolutionDirectory.FullPath,
-                new DotNetCoreRestoreSettings {
+                new DotNetRestoreSettings {
                     MSBuildSettings = data.MSBuildSettings
                 }
             );
@@ -129,9 +129,9 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does<BuildData>(
         (context, data)=> {
-            context.DotNetCoreBuild(
+            context.DotNetBuild(
                 data.SolutionDirectory.FullPath,
-                new DotNetCoreBuildSettings {
+                new DotNetBuildSettings {
                     NoRestore = true,
                     MSBuildSettings = data.MSBuildSettings
                 }
@@ -143,9 +143,9 @@ Task("Publish")
     .IsDependentOn("Build")
     .Does<BuildData>(
         (context, data)=> {
-            context.DotNetCorePublish(
+            context.DotNetPublish(
                 data.SolutionDirectory.FullPath,
-                new DotNetCorePublishSettings {
+                new DotNetPublishSettings {
                     NoRestore = true,
                     NoBuild = true,
                     OutputDirectory = data.PublishDirectory,

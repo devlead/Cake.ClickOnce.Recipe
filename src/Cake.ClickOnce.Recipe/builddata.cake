@@ -1,7 +1,7 @@
 public record BuildData(
     string Version,
     string Configuration,
-    DotNetCoreMSBuildSettings MSBuildSettings,
+    DotNetMSBuildSettings MSBuildSettings,
     ClickOnceData ClickOnceData,
     DirectoryPath SolutionDirectory,
     DirectoryPath ArtifactsDirectory,
