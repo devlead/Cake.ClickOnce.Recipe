@@ -29,7 +29,7 @@ Setup(
         return new BuildData(
             version,
             "src",
-            new DotNetCoreMSBuildSettings()
+            new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
                 .SetVersion(version)
                 .WithProperty("Copyright", $"Mattias Karlsson © {DateTime.UtcNow.Year}")
@@ -61,18 +61,18 @@ Task("Clean")
     )
 .Then("Restore")
     .Does<BuildData>(
-        static (context, data) => context.DotNetCoreRestore(
+        static (context, data) => context.DotNetRestore(
             data.ProjectRoot.FullPath,
-            new DotNetCoreRestoreSettings {
+            new DotNetRestoreSettings {
                 MSBuildSettings = data.MSBuildSettings
             }
         )
     )
 .Then("DPI")
     .Does<BuildData>(
-        static (context, data) => context.DotNetCoreTool(
+        static (context, data) => context.DotNetTool(
                 "tool",
-                new DotNetCoreToolSettings {
+                new DotNetToolSettings {
                     EnvironmentVariables = {
                         { "RECIPE_SOURCE",  data.NuGetOutputPath.FullPath },
                         { "RECIPE_VERSION",  data.Version },
@@ -116,9 +116,9 @@ Task("Clean")
     )
 .Then("Pack")
     .Does<BuildData>(
-        static (context, data) => context.DotNetCorePack(
+        static (context, data) => context.DotNetPack(
             data.ProjectRoot.FullPath,
-            new DotNetCorePackSettings {
+            new DotNetPackSettings {
                 NoBuild = true,
                 NoRestore = true,
                 OutputDirectory = data.NuGetOutputPath,

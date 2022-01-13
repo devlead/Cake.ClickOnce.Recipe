@@ -4,7 +4,7 @@
 public record BuildData(
     string Version,
     DirectoryPath ProjectRoot,
-    DotNetCoreMSBuildSettings MSBuildSettings,
+    DotNetMSBuildSettings MSBuildSettings,
     DirectoryPath ArtifactsPath,
     DirectoryPath OutputPath,
     DirectoryPath IntegrationTestsPath
