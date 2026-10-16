@@ -94,9 +94,17 @@ Task("Clean")
                                                         .AppendSwitchQuoted("--output", "table")
                                                         .Append(
                                                             (
-                                                                !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_SharedKey"))
-                                                                &&
-                                                                !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_WorkspaceId"))
+(
+                                                                    !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_Endpoint"))
+                                                                    &&
+                                                                    !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_RuleId"))
+                                                                )
+                                                                ||
+                                                                (
+                                                                    !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_SharedKey"))
+                                                                    &&
+                                                                    !string.IsNullOrWhiteSpace(context.EnvironmentVariable("NuGetReportSettings_WorkspaceId"))
+                                                                )
                                                             )
                                                                 ? "report"
                                                                 : "analyze"
